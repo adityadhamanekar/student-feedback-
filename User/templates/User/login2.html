@@ -1,0 +1,49 @@
+{% extends "base.html" %} {% block title %}login{% endblock title %}Contact 
+{% block content %}
+
+<section class="section-cta">
+  <div class="container">
+    <div class="cta">
+      <div class="cta-text-box">
+        <h2 class="heading-secondary">Login to your account!</h2>
+
+        <form
+          class="cta-form"
+          action="{%url 'login'%}"
+          method="POST"
+          style="display: flex; flex-direction: column"
+        >
+          {% csrf_token %}
+          <div>
+            <label for="full-name">Username</label>
+            <input id="full-name" type="text" required name="username" />
+          </div>
+
+          <div>
+            <label for="email">password</label>
+            <input id="email" type="password" name="password" required />
+          </div>
+
+          <button
+            class="btn btn--form"
+            style="align-self: initial"
+            type="submit"
+          >
+            Login
+          </button>
+          <div class="container all-recipes">
+            <a href="{% url 'signup' %}" class="link" style="color: white;text-transform: uppercase;">signup</a>
+          </div>
+          <!-- <input type="checkbox" />
+                <input type="number" /> -->
+        </form>
+      </div>
+      <div
+        class="cta-img-box"
+        role="img"
+        aria-label="Woman enjoying food"
+      ></div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

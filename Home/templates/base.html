@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="{% static 'Home/css/general.css'%}"/>
+    <link rel="stylesheet" href="{% static 'Home/css/base.css'%}" />
+
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule=""
+      src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"
+    ></script>
+ {% block cssStyle %}{% endblock cssStyle %}
+   
+
+    <title>{% block title %}{% endblock title %}</title>
+  </head>
+  <body>
+    <header class="header">
+      <a href="{% url 'home' %}" class="main-nav-link">
+        <h2>Feedback</h2>
+      </a>
+      
+      <nav class="main-nav">
+        <ul class="main-nav-list">
+          {% if request.user.is_superuser %}
+    <li><a class="main-nav-link" href='{% url "all_feedback" %}'>All Feedback</a></li>
+{% endif %}
+
+          
+          
+           {% if request.user.is_authenticated %}
+          <li style="display:flex; align-items: center ; justify-content: center;"><p style="margin-right:2rem ; font-size: 1.7rem">{{request.user | upper}}</p><a class="main-nav-link nav-cta" href="{% url "logout" %}">Logout</a></li> {% else %}
+          <li><a class="main-nav-link nav-cta" href="{% url "login" %}">Login</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
+    {% block content %}{% endblock content %}
+
+    <footer class="footer">
+      <div class="container grid grid--footer">
+        <div class="logo-col">
+          <a href="#"  class="main-nav-link" style='margin-bottom : 2rem;'>
+            <h2>feedback</h2>
+          </a>
+
+          <ul class="social-links">
+            <li>
+              <a class="footer-link" href="#"
+                ><ion-icon class="social-icon" name="logo-instagram"></ion-icon
+              ></a>
+            </li>
+            <li>
+              <a class="footer-link" href="#"
+                ><ion-icon class="social-icon" name="logo-facebook"></ion-icon
+              ></a>
+            </li>
+            <li>
+              <a class="footer-link" href="#"
+                ><ion-icon class="social-icon" name="logo-twitter"></ion-icon
+              ></a>
+            </li>
+          </ul>
+
+          <p class="copyright">
+            Copyright &copy; Feedback system. All rights reserved.
+          </p>
+        </div>
+        <div class="address-col">
+          <p class="footer-heading">Contact us</p>
+          <address class="contacts">
+            <p class="address">
+              jain college of engineering
+            </p>
+            <p>
+              <a class="footer-link" href="tel:415-201-6370">415-201-6370</a
+              ><br />
+              <a class="footer-link" href="mailto:hello@feedback.com"
+                >feedback@jain.com</a
+              >
+            </p>
+          </address>
+        </div>
+        <nav class="nav-col">
+          <p class="footer-heading">Account</p>
+          <ul class="footer-nav">
+            <li><a class="footer-link" href="#">Create account</a></li>
+            <li><a class="footer-link" href="#">Sign in</a></li>
+            
+          </ul>
+        </nav>
+
+        
+      </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+  
+</html>

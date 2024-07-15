@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}All Feedback{% endblock title %}
+{% block content %}
+<main class="mt-5 mb-5">
+    <div class="container mt-5">
+        <h2>All Feedback</h2>
+
+        {% for feedback in all_feedback %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Feedback {{ forloop.counter }}</h5>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td><strong>Name:</strong></td>
+                            <td>{{ feedback.name }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>USN:</strong></td>
+                            <td>{{ feedback.usn }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Branch:</strong></td>
+                            <td>{{ feedback.get_branch_display }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>Feedback Questions:</strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Overall quality:</strong></td>
+                                            <td>{{ feedback.question1 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Instructor's teaching:</strong></td>
+                                            <td>{{ feedback.question2 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Course materials:</strong></td>
+                                            <td>{{ feedback.question3 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Assignments and projects:</strong></td>
+                                            <td>{{ feedback.question4 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Overall value:</strong></td>
+                                            <td>{{ feedback.question5 }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Additional Feedback:</strong></td>
+                            <td>{{ feedback.additional_feedback }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Download PDF:</strong></td>
+                            <td><a href="{{ feedback.pdf_url }}" class="btn btn-primary btn-sm" download>Download PDF</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</main>
+{% endblock content %}
