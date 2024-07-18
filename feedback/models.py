@@ -9,6 +9,25 @@ class Feedback(models.Model):
         ('cv', 'Civil Engineering (CV)'),
     ]
 
+    SEMESTER_CHOICES = [
+        (1, '1st Semester'),
+        (2, '2nd Semester'),
+        (3, '3rd Semester'),
+        (4, '4th Semester'),
+        (5, '5th Semester'),
+        (6, '6th Semester'),
+        (7, '7th Semester'),
+        (8, '8th Semester'),
+    ]
+
+    TEACHER_CHOICES = [
+        ('teacher1', 'Dr. John Doe'),
+        ('teacher2', 'Dr. Jane Smith'),
+        ('teacher3', 'Prof. Richard Roe'),
+        ('teacher4', 'Prof. Mary Major'),
+        ('teacher5', 'Dr. Alan Smithee'),
+    ]
+
     RATING_CHOICES = [
         ('Excellent', 'Excellent'),
         ('Good', 'Good'),
@@ -19,6 +38,8 @@ class Feedback(models.Model):
     name = models.CharField(max_length=100)
     usn = models.CharField(max_length=20)
     branch = models.CharField(max_length=2, choices=BRANCH_CHOICES)
+    semester = models.IntegerField(choices=SEMESTER_CHOICES, default=1)
+    teacher = models.CharField(max_length=10, choices=TEACHER_CHOICES, default='teacher1')
     question1 = models.CharField(max_length=10, choices=RATING_CHOICES)
     question2 = models.CharField(max_length=10, choices=RATING_CHOICES)
     question3 = models.CharField(max_length=10, choices=RATING_CHOICES)
@@ -29,7 +50,6 @@ class Feedback(models.Model):
 
     def __str__(self):
         return self.name
-
 
 
 class Question(models.Model):

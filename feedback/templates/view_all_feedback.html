@@ -24,6 +24,14 @@
                             <td>{{ feedback.get_branch_display }}</td>
                         </tr>
                         <tr>
+                            <td><strong>Semester:</strong></td>
+                            <td>{{ feedback.get_semester_display }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teacher:</strong></td>
+                            <td>{{ feedback.get_teacher_display }}</td>
+                        </tr>
+                        <tr>
                             <td colspan="2"><strong>Feedback Questions:</strong></td>
                         </tr>
                         <tr>
@@ -60,7 +68,7 @@
                         </tr>
                         <tr>
                             <td><strong>Download PDF:</strong></td>
-                            <td><a href="{{ feedback.pdf_url }}" class="btn btn-primary btn-sm" download>Download PDF</a></td>
+                            <td><a href="{{ feedback.pdf_url }}" class="btn btn-primary btn-sm" download style="width: 30%; font-size:16px">Download </a></td>
                         </tr>
                     </tbody>
                 </table>
