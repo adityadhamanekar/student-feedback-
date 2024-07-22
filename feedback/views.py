@@ -67,9 +67,49 @@ def feedback_view(request):
 def feedback_success_view(request):
     return render(request, 'feedback_success.html')
 
+
 def view_all_feedback(request):
-    all_feedback = Feedback.objects.all()
+    teacher_filter = request.GET.get('teacher')
+    if teacher_filter:
+        all_feedback = Feedback.objects.filter(teacher=teacher_filter)
+        show_graph = True
+    else:
+        all_feedback = Feedback.objects.all()
+        show_graph = False
+
+    teachers = Feedback.TEACHER_CHOICES
+
+    # Get questions from the database
+    question_objects = Question.objects.all()
+    questions = [question.question_text for question in question_objects]
+    question_dict = {question.question_text: f'question{i+1}' for i, question in enumerate(question_objects)}
+
+    # Initialize data structures for rating counts
+    rating_choices = ['Excellent', 'Good', 'Average', 'Poor']
+    rating_counts = {question: {rating: 0 for rating in rating_choices} for question in questions}
+    total_responses = {question: 0 for question in questions}
+
+    # Aggregate rating data
+    for feedback in all_feedback:
+        for question_text, question_field in question_dict.items():
+            rating = getattr(feedback, question_field)
+            if rating in rating_counts[question_text]:
+                rating_counts[question_text][rating] += 1
+                total_responses[question_text] += 1
+
+    # Calculate percentages for each question
+    rating_percentages = {
+        question: {rating: (count / total_responses[question]) * 100 if total_responses[question] else 0
+                   for rating, count in rating_counts[question].items()}
+        for question in questions
+    }
+
     context = {
-        'all_feedback': all_feedback
+        'all_feedback': all_feedback,
+        'teachers': teachers,
+        'teacher_filter': teacher_filter,
+        'questions': questions,
+        'rating_percentages': rating_percentages,
+        'show_graph': show_graph,
     }
     return render(request, 'view_all_feedback.html', context)

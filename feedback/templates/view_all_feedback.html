@@ -5,6 +5,27 @@
     <div class="container mt-5">
         <h2>All Feedback</h2>
 
+        <!-- Filter Form -->
+        <form method="get" class="mb-4">
+            <div class="form-group">
+                <label for="teacher">Filter by Teacher:</label>
+                <select class="form-control" id="teacher" name="teacher" onchange="this.form.submit()">
+                    <option value="">All Teachers</option>
+                    {% for value, display in teachers %}
+                        <option value="{{ value }}" {% if teacher_filter == value %}selected{% endif %}>{{ display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+
+        <!-- Graph -->
+         {% if show_graph %}
+        <div class="mb-4">
+            <canvas id="ratingChart"></canvas>
+        </div>
+        {% endif %}
+
+        <!-- Display Feedback -->
         {% for feedback in all_feedback %}
         <div class="card mb-4">
             <div class="card-body">
@@ -68,7 +89,7 @@
                         </tr>
                         <tr>
                             <td><strong>Download PDF:</strong></td>
-                            <td><a href="{{ feedback.pdf_url }}" class="btn btn-primary btn-sm" download style="width: 30%; font-size:16px">Download </a></td>
+                            <td><a href="{{ feedback.pdf_url }}" class="btn btn-primary btn-sm" download style="width: 30%; font-size:16px">Download</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -78,4 +99,76 @@
 
     </div>
 </main>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('ratingChart').getContext('2d');
+
+    // Extract data from Django context
+    var questions = {{ questions|safe }};
+    var ratingPercentages = {{ rating_percentages|safe }};
+
+    // Prepare data for chart
+    var labels = questions;
+    var datasets = [];
+
+    // Create dataset for each rating
+    var colors = ['rgba(144, 238, 144, 0.2)', 'rgba(173, 216, 230, 0.2)', 'rgba(255, 255, 224, 0.2)', 'rgba(255, 182, 193, 0.2)'];
+    var borderColors = ['rgba(144, 238, 144, 1)', 'rgba(173, 216, 230, 1)', 'rgba(255, 255, 224, 1)', 'rgba(255, 182, 193, 1)'];
+    var ratingLabels = ['Excellent', 'Good', 'Average', 'Poor'];
+
+    ratingLabels.forEach((rating, index) => {
+        datasets.push({
+            label: rating,
+            data: labels.map(question => ratingPercentages[question][rating]),
+            backgroundColor: colors[index],
+            borderColor: borderColors[index],
+            borderWidth: 1,
+            barPercentage: 0.6
+        });
+    });
+
+    // Create chart
+    var ratingChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: false,
+                    title: {
+                        display: true,
+                        text: 'Questions'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Percentage'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Rating Distribution by Question'
+                }
+            }
+        }
+    });
+</script>
 {% endblock content %}
